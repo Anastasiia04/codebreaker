@@ -5,7 +5,7 @@ executors:
     working_directory: ~/codebreaker
     description: Codebreaker gem 
     docker:
-      - image: circleci/ruby:2.6.5
+      - image: circleci/ruby:2.6.3
 
 caches:
   - &bundle_cache_full v1-codebreaker-{{ checksum "Gemfile.lock" }}
