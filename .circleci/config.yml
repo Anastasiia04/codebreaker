@@ -1,0 +1,69 @@
+version: 2.1
+
+executors:
+  default:
+    working_directory: ~/codebreaker
+    description: Codebreaker gem 
+    docker:
+      - image: circleci/ruby:2.6.5
+
+caches:
+  - &bundle_cache_full v1-codebreaker-{{ checksum "Gemfile.lock" }}
+  - &bundle_cache v1-codebreaker
+
+commands:
+  setup_environment:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *bundle_cache_full
+            - *bundle_cache
+      - run:
+          name: Force Bundler Version
+          command: bundle install --path vendor/bundle
+      - save_cache:
+          paths:
+            - vendor/bundle
+          key: *bundle_cache_full
+  run_linters:
+    description: Start lintering
+    steps:
+      - run:
+          name: rubocop
+          command: bundle exec rubocop
+      - run:
+          name: fasterer
+          command: bundle exec fasterer
+  run_specs:
+    description: Run specs
+    steps:
+      - run:
+          name: run spec
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+            bundle exec rspec --format progress \
+                                  --out /tmp/test-results/rspec.xml \
+                                  $TEST_FILES
+
+jobs:
+  lintering:
+    executor: default
+    steps:
+      - setup_environment
+      - run_linters
+  run_specs:
+    executor: default
+    steps:
+      - setup_environment
+      - run_specs
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - lintering
+      - run_specs:
+          requires:
+            - lintering
