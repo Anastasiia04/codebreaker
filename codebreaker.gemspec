@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Anastasiia04']
   spec.email         = ['anastasiamoskalenko04@gmail.com']
 
-  spec.summary       = 'This gem is designed for help to create a guessing game.'
-  spec.homepage      = 'https://rubygems.org/gems/codebreaker'
+  spec.summary       = 'This gem help to create a guessing game.'
+  spec.homepage      = 'https://github.com/Anastasiia04/codebreaker'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
