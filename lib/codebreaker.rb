@@ -92,8 +92,9 @@ module Codebreaker
     end
 
     def compare_hashes
-      @secret_hash.merge(@user_hash) { |k, o, n| @secret_hash.reject! { |key| key == k } && @count_plus += 1 if o == n }
-      @secret_hash.select { |_, value| @user_hash.value? value }.size.times { @count_minus += 1 }
+      secret_hash = @secret_hash
+      secret_hash.merge(@user_hash) { |k, o, n| secret_hash.reject! { |key| key == k } && @count_plus += 1 if o == n }
+      secret_hash.select { |_, value| @user_hash.value? value }.size.times { @count_minus += 1 }
     end
 
     def save

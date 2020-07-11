@@ -24,7 +24,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   it 'should have correct answer' do
-    expect(game.check_attempt('6666')).to eq(['+'])
+    expect(game.check_attempt('6666')).to eql(['+'])
   end
 
   it 'should have correct answer' do
