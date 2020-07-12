@@ -21,5 +21,6 @@ RSpec.describe Codebreaker::Game do
     expect(game.validate_attempt(string)).to eq(true)
     string = '1234'
     expect(game.validate_attempt(string)).to eq(true)
+    expect(game.validate_attempt('132456')).to eq(false)
   end
 end

@@ -85,16 +85,19 @@ module Codebreaker
       @user_hash = Hash[(0...@length_code).zip user_string.split('').map(&:to_i)]
       array_of_guess_position = []
       @attempts -= 1
-      compare_hashes
+      secret_hash = @secret_hash
+      compare_hashes(secret_hash)
       @count_plus.times { array_of_guess_position << @symbol_guess_position }
       @count_minus.times { array_of_guess_position << @symbol_guess_number }
       array_of_guess_position
     end
 
-    def compare_hashes
-      secret_hash = 0
-      secret_hash = @secret_hash
-      secret_hash.merge(@user_hash) { |k, o, n| secret_hash.reject! { |key| key == k } && @count_plus += 1 if o == n }
+    def compare_hashes(secret_hash)
+      @count_plus = 0
+      @count_minus = 0
+      secret_hash.merge(@user_hash) do |_k, o, n|
+        @user_hash.reject! { |_key, val| val == n } && @count_plus += 1 if o == n
+      end
       secret_hash.select { |_, value| @user_hash.value? value }.size.times { @count_minus += 1 }
     end
 
