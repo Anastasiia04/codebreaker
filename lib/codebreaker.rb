@@ -1,46 +1,33 @@
 require 'terminal-table'
-require_relative 'validate.rb'
+require 'psych'
+require 'validate.rb'
+require 'errors.rb'
+require 'user.rb'
+require 'difficulty.rb'
 require 'codebreaker/version'
 
 module Codebreaker
   class Error < StandardError; end
-
+  include Errors
+  include Validate
   class Game
     PATH = 'statistics.yml'.freeze
     include Validate
-    attr_accessor :user_name, :difficulty, :attempts, :hints, :total_attempts, :total_hints, :win,
+    attr_accessor :user, :attempts, :hints, :win,
                   :secret_hash, :symbol_guess_position, :symbol_guess_number, :count_minus, :count_plus,
                   :length_code, :range_sectret_number
 
-    def initialize
-      @attempts = 0
-      @hints = 0
-      @difficulty = ''
+    def initialize(name, difficulty)
       @count_minus = 0
       @count_plus = 0
       @symbol_guess_position = '+'
       @symbol_guess_number = '-'
       @length_code = 4
       @range_sectret_number = 6
-    end
-
-    def enter_user_name(string)
-      @user_name = string
-    end
-
-    DIFFICULTY = {
-      "easy": [15, 2, '1 easy'],
-      "medium": [10, 1, '2 medium'],
-      "hell": [5, 1, '3 hell']
-    }.freeze
-
-    def choose_difficulty(choose_difficult_string)
-      @difficulty = DIFFICULTY[choose_difficult_string.to_sym]
-      @attempts = @difficulty[0]
-      @hints = @difficulty[1]
-      @difficulty = @difficulty[2]
-      @total_attempts = @attempts
-      @total_hints = @hint
+      @difficulty = Difficulty.new(difficulty)
+      @user = User.new(name)
+      @attempts = @difficulty.attempts
+      @hints = @difficulty.hints
     end
 
     def add_rating
@@ -59,8 +46,8 @@ module Codebreaker
       to_table(rows)
     end
 
-    def sort_data
-      data = Psych.load_stream(File.read(PATH))
+    def sort_data(file_name = PATH)
+      data = Psych.load_stream(File.read(file_name))
       data.sort_by { |h| [h[:difficult], h[:attempts], h[:hints]] }.reverse
     end
 
@@ -101,16 +88,16 @@ module Codebreaker
       secret_hash.select { |_, value| @user_hash.value? value }.size.times { @count_minus += 1 }
     end
 
-    def save
-      hash = {  name: @user_name, difficult: @difficulty,
-                total_attempts: @total_attempts, attempts: @attempts,
-                total_hints: @total_hints, hints: @hints }
-      File.open(PATH, 'a') { |file| file.write(hash.to_yaml) }
+    def save(file_name = PATH)
+      hash = {  name: @user.name, difficult: @difficulty.title,
+                total_attempts: @difficulty.attempts, attempts: @attempts,
+                total_hints: @difficulty.hints, hints: @hints }
+      File.open(file_name, 'a') { |file| file.write(hash.to_yaml) }
     end
 
     def play_again
-      @attempts = @total_attempts
-      @hints = @total_hints
+      @attempts = @difficulty.attempts
+      @hints = @difficulty.hints
       @count_minus = 0
       @count_plus = 0
     end

@@ -1,12 +1,20 @@
-require 'bundler/setup'
-require 'codebreaker'
 require 'simplecov'
-SimpleCov.start
-SimpleCov.minimum_coverage 95
+SimpleCov.start do
+  minimum_coverage 95
+  add_filter './lib/'
+end
+require 'psych'
+require 'rspec'
+require 'bundler/setup'
+require_relative '../lib/codebreaker.rb'
+require_relative '../lib/validate.rb'
+require_relative '../lib/errors.rb'
+require_relative '../lib/user.rb'
+require_relative '../lib/difficulty.rb'
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
-
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 

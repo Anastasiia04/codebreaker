@@ -1,6 +1,6 @@
 module Validate
-  def validate_name(user_string)
-    user_string.size >= 3 && user_string.size <= 20 ? true : false
+  def size_between?(verifiable_value, minimum, maximum)
+    verifiable_value.size.between?(minimum, maximum)
   end
 
   def validate_attempt(user_string)
