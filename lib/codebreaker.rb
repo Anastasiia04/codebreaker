@@ -40,9 +40,9 @@ module Codebreaker
       new_sort_arr
     end
 
-    def stats
+    def stats(data_whith_rating = add_rating)
       rows = []
-      add_rating.each { |d| rows << d.map { |_k, v| v } }
+      data_whith_rating.each { |d| rows << d.map { |_k, v| v } }
       to_table(rows)
     end
 

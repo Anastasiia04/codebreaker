@@ -144,5 +144,11 @@ RSpec.describe Codebreaker::Game do
                       total_attempts: 5, attempts: 5, total_hints: 1, hints: 1 }]
       expect(game.add_rating).to eq(arr_rating)
     end
+
+    it 'correct working stats def ' do
+      arr_rating = [{ rating: 1, name: 'name', difficult: '3 hell',
+                      total_attempts: 5, attempts: 5, total_hints: 1, hints: 1 }]
+      expect(game.stats(arr_rating)) == game.stats
+    end
   end
 end
