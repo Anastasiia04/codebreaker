@@ -14,21 +14,21 @@ module Codebreaker
     end
 
     DIFFICULTY = {
-      "easy": [15, 2, '1 easy'],
-      "medium": [10, 1, '2 medium'],
-      "hell": [5, 1, '3 hell']
+      'easy' => [15, 2, '1 easy'],
+      'medium' => [10, 1, '2 medium'],
+      'hell' => [5, 1, '3 hell']
     }.freeze
 
     def choose_difficulty(choose_difficult_string)
-      @difficulty = DIFFICULTY[choose_difficult_string.to_sym]
+      @difficulty = DIFFICULTY[choose_difficult_string]
       @attempts = @difficulty[0]
       @hints = @difficulty[1]
       @title = @difficulty[2]
     end
 
     def validate_difficulty(difficulty)
-      valid_difficulty_commands = DIFFICULTY.values.map { |key, _v| key }
-      raise ChooseError if valid_difficulty_commands.include?(difficulty)
+      valid_difficulty_commands = DIFFICULTY.map { |key, _v| key }
+      raise ChooseError unless valid_difficulty_commands.include?(difficulty)
 
       difficulty
     end
