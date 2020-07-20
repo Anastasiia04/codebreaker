@@ -30,7 +30,7 @@ RSpec.describe Codebreaker::Game do
     end
   end
 
-  describe 'validate attempt' do
+  describe 'validate attempt size' do
     let(:game) { described_class.new('name', 'hell') }
 
     before do
@@ -38,14 +38,36 @@ RSpec.describe Codebreaker::Game do
     end
 
     %w[1234 6521 3265].each do |guess|
-      it 'must return true' do
-        expect(game.validate_attempt(guess)).to be(true)
+      it 'must return string' do
+        expect(game.validate_attempt_size(guess)).to be(guess)
       end
     end
 
-    %w[12 652145 qwer].each do |guess|
-      it 'must return false' do
-        expect(game.validate_attempt(guess)).to be(false)
+    %w[12 652145 wqe].each do |_guess|
+      it 'must return eroor' do
+        error = Codebreaker::Errors::AttemptError.new
+        expect { raise error }.to raise_error(error)
+      end
+    end
+  end
+
+  describe 'validate attempt range' do
+    let(:game) { described_class.new('name', 'hell') }
+
+    before do
+      game.secret_hash = { 0 => 1, 1 => 2, 2 => 3, 3 => 4 }
+    end
+
+    %w[1234 6521 3265].each do |guess|
+      it 'must return string' do
+        expect(game.validate_attempt_range(guess)).to be(guess)
+      end
+    end
+
+    %w[1239 6587].each do |_guess|
+      it 'must return eroor' do
+        error = Codebreaker::Errors::AttemptError.new
+        expect { raise error }.to raise_error(error)
       end
     end
   end

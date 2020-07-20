@@ -8,9 +8,11 @@ require 'rspec'
 require 'bundler/setup'
 require_relative '../lib/codebreaker.rb'
 require_relative '../lib/validate.rb'
-require_relative '../lib/errors.rb'
 require_relative '../lib/user.rb'
 require_relative '../lib/difficulty.rb'
+require_relative '../lib/errors/attempt_error.rb'
+require_relative '../lib/errors/choose_error.rb'
+require_relative '../lib/errors/length_error.rb'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -1,5 +1,5 @@
 require 'validate.rb'
-require 'errors.rb'
+require 'errors/length_error.rb'
 
 module Codebreaker
   class User

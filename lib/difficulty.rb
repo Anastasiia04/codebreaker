@@ -1,5 +1,5 @@
 require 'validate.rb'
-require 'errors.rb'
+require 'errors/choose_error.rb'
 
 module Codebreaker
   class Difficulty
