@@ -29,8 +29,6 @@ module Codebreaker
     def validate_difficulty(difficulty)
       valid_difficulty_commands = DIFFICULTY.map { |key, _v| key }
       raise ChooseError unless valid_difficulty_commands.include?(difficulty)
-
-      difficulty
     end
   end
 end
