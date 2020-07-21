@@ -1,4 +1,4 @@
-require 'errors/length_error.rb'
+require 'errors/attempt_error.rb'
 
 module Validate
   def size_between?(verifiable_value, minimum, maximum)
