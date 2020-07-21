@@ -7,7 +7,7 @@ module Validate
 
   def validate_attempt_size(user_string)
     if user_string.size > @length_code || user_string.size < @length_code || user_string.to_i.negative?
-      raise ::Errors::AttemptError
+      raise Codebreaker::Errors::AttemptErrors
     end
 
     user_string
@@ -15,7 +15,7 @@ module Validate
 
   def validate_attempt_range(user_string)
     arr_of_num = user_string.to_i.digits.map { |num| num if (1..@range_sectret_number).to_a.include? num }.compact
-    raise ::Errors::AttemptError unless arr_of_num.size >= @length_code
+    raise Codebreaker::Errors::AttemptErrors unless arr_of_num.size >= @length_code
 
     user_string
   end
