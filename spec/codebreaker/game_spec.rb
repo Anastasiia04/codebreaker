@@ -2,9 +2,10 @@ require 'spec_helper.rb'
 
 RSpec.describe Codebreaker::Game do
   describe 'check_code' do
-    let(:game) { described_class.new('name', 'hell') }
+    let(:game) { described_class.new }
 
     before do
+      game.attempts = 10
       game.secret_hash = { 0 => 6, 1 => 5, 2 => 4, 3 => 3 }
     end
 
@@ -17,9 +18,10 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'check 1234 code' do
-    let(:game) { described_class.new('name', 'hell') }
+    let(:game) { described_class.new }
 
     before do
+      game.attempts = 10
       game.secret_hash = { 0 => 1, 1 => 2, 2 => 3, 3 => 4 }
     end
 
@@ -31,7 +33,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'validate attempt size' do
-    let(:game) { described_class.new('name', 'hell') }
+    let(:game) { described_class.new }
 
     before do
       game.secret_hash = { 0 => 1, 1 => 2, 2 => 3, 3 => 4 }
@@ -52,7 +54,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'validate attempt range' do
-    let(:game) { described_class.new('name', 'hell') }
+    let(:game) { described_class.new }
 
     before do
       game.secret_hash = { 0 => 1, 1 => 2, 2 => 3, 3 => 4 }
@@ -73,9 +75,10 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'hint' do
-    subject(:game) { described_class.new('name', 'easy') }
+    subject(:game) { described_class.new }
 
     it 'show hint' do
+      game.registration_difficulty('hell')
       game.start
       game.show_hint
       expect(game.hints) == 1
@@ -87,7 +90,11 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'enter easy difficulty' do
-    subject(:game) { described_class.new('name', 'easy') }
+    subject(:game) { described_class.new }
+
+    before do
+      game.registration_difficulty('easy')
+    end
 
     it 'shoud have choose right attempts' do
       expect(game.attempts).to eq(15)
@@ -99,7 +106,11 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'enter medium difficulty' do
-    subject(:game) { described_class.new('name', 'medium') }
+    subject(:game) { described_class.new }
+
+    before do
+      game.registration_difficulty('medium')
+    end
 
     it 'shoud have choose right attempts' do
       expect(game.attempts).to eq(10)
@@ -111,7 +122,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'error in name invalid' do
-    subject(:game) { described_class.new('na', 'medium') }
+    subject(:game) { described_class.new }
 
     it 'shoud have choose right attempts' do
       error = Codebreaker::Errors::LengthError.new
@@ -120,7 +131,7 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'error in difficulty invalid' do
-    subject(:game) { described_class.new('name', 'kkk') }
+    subject(:game) { described_class.new }
 
     it 'shoud have choose right attempts' do
       error = Codebreaker::Errors::ChooseError.new
@@ -129,9 +140,10 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'play again def' do
-    subject(:game) { described_class.new('name', 'hell') }
+    subject(:game) { described_class.new }
 
     before do
+      game.registration_difficulty('hell')
       game.start
       game.check_attempt('1324')
       game.show_hint
@@ -148,11 +160,13 @@ RSpec.describe Codebreaker::Game do
   end
 
   describe 'add rating' do
-    subject(:game) { described_class.new('name', 'hell') }
+    subject(:game) { described_class.new }
 
     let(:test_path) { './spec/fixtures/statistics.yml' }
 
     before do
+      game.registration_user('name')
+      game.registration_difficulty('hell')
       stub_const('Codebreaker::Game::PATH', test_path)
       game.save
     end

@@ -19,15 +19,21 @@ module Codebreaker
                   :secret_hash, :symbol_guess_position, :symbol_guess_number, :count_minus, :count_plus,
                   :length_code, :range_sectret_number
 
-    def initialize(name, difficulty)
+    def initialize
       @count_minus = 0
       @count_plus = 0
       @symbol_guess_position = '+'
       @symbol_guess_number = '-'
       @length_code = 4
       @range_sectret_number = 6
-      @difficulty = Difficulty.new(difficulty)
+    end
+
+    def registration_user(name)
       @user = User.new(name)
+    end
+
+    def registration_difficulty(difficulty)
+      @difficulty = Difficulty.new(difficulty)
       @attempts = @difficulty.attempts
       @hints = @difficulty.hints
     end
