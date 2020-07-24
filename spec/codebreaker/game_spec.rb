@@ -163,13 +163,11 @@ RSpec.describe Codebreaker::Game do
     subject(:game) { described_class.new }
 
     let(:test_folder_name) { './spec/fixtures/statistics.yml' }
-    # let(:test_file_name) { '' }
 
     before do
       game.registration_user('name')
       game.registration_difficulty('hell')
       stub_const('Codebreaker::Storage::PATH_TO_FILE', test_folder_name)
-      # stub_const('Codebreaker::Storage::FILE_NAME', test_file_name)
       game.save
     end
 
