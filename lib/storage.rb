@@ -6,11 +6,12 @@ module Codebreaker
     FILE_NAME = 'statistics.yml'.freeze
     PATH_TO_FILE = File.join(FOLDER_NAME, FILE_NAME)
 
-    def initialize
-      Dir.mkdir(PATH_TO_FILE)
+    def create_folder
+      Dir.mkdir(PATH_TO_FILE) until file_exist
     end
 
     def save_to_file(data)
+      create_folder
       File.open(PATH_TO_FILE, 'a') { |file| file.write(data.to_yaml) }
     end
 
@@ -19,6 +20,7 @@ module Codebreaker
     end
 
     def load_from_file
+      create_folder
       Psych.load_stream(File.read(PATH_TO_FILE))
     end
   end
