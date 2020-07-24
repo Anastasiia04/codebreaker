@@ -162,17 +162,18 @@ RSpec.describe Codebreaker::Game do
   describe 'add rating' do
     subject(:game) { described_class.new }
 
-    let(:test_path) { './spec/fixtures/statistics.yml' }
+    # let(:test_path) { './fixtures/statistics.yml' }
+    # let(:test_folder_name) { 'fixtures' }
 
     before do
       game.registration_user('name')
       game.registration_difficulty('hell')
-      stub_const('Codebreaker::Game::PATH', test_path)
+      # stub_const('Codebreaker::STORAGE::PATH_TO_FILE', test_path)
       game.save
     end
 
     after do
-      File.open('./spec/fixtures/statistics.yml', 'w') { |file| file.truncate(0) }
+      File.open(Codebreaker::Storage::PATH_TO_FILE, 'w') { |file| file.truncate(0) }
     end
 
     it 'correct add rating to array for table ' do

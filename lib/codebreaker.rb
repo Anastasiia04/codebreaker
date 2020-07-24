@@ -4,17 +4,18 @@ require 'validate.rb'
 require 'errors/attempt_error.rb'
 require 'errors/choose_error.rb'
 require 'errors/length_error.rb'
+require 'storage.rb'
 require 'user.rb'
 require 'difficulty.rb'
 require 'codebreaker/version'
 
 module Codebreaker
   class Error < StandardError; end
-  include Errors
-  include Validate
+
   class Game
-    PATH = 'statistics.yml'.freeze
     include Validate
+    include Errors
+    include Storage
     attr_accessor :user, :attempts, :hints, :win,
                   :secret_hash, :symbol_guess_position, :symbol_guess_number, :count_minus, :count_plus,
                   :length_code, :range_sectret_number
@@ -54,9 +55,8 @@ module Codebreaker
       to_table(rows)
     end
 
-    def sort_data(file_name = PATH)
-      data = Psych.load_stream(File.read(file_name))
-      data.sort_by { |h| [h[:difficult], h[:attempts], h[:hints]] }.reverse
+    def sort_data
+      load_from_file.sort_by { |h| [h[:difficult], h[:attempts], h[:hints]] }.reverse
     end
 
     def to_table(rows)
@@ -96,11 +96,11 @@ module Codebreaker
       secret_hash.select { |_, value| @user_hash.value? value }.size.times { @count_minus += 1 }
     end
 
-    def save(file_name = PATH)
+    def save
       hash = {  name: @user.name, difficult: @difficulty.title,
                 total_attempts: @difficulty.attempts, attempts: @attempts,
                 total_hints: @difficulty.hints, hints: @hints }
-      File.open(file_name, 'a') { |file| file.write(hash.to_yaml) }
+      save_to_file(hash)
     end
 
     def play_again
