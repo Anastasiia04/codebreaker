@@ -16,7 +16,7 @@ module Codebreaker
     end
 
     def file_exist
-      File.file?(PATH_TO_FILE)
+      File.exist?(PATH_TO_FILE)
     end
 
     def load_from_file
