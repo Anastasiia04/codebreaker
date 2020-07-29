@@ -1,4 +1,4 @@
-require 'autoload.rb'
+require_relative 'autoload.rb'
 
 module Codebreaker
   class Error < StandardError; end
