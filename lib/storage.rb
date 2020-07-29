@@ -13,7 +13,7 @@ module Codebreaker
 
     def save_to_file(data)
       create_folder
-      File.open(File.dirname(PATH_TO_FILE), 'a') { |file| file.write(data.to_yaml) }
+      File.open(PATH_TO_FILE, 'a') { |file| file.write(data.to_yaml) }
     end
 
     def load_from_file
