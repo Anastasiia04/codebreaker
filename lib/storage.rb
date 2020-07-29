@@ -8,7 +8,7 @@ module Codebreaker
 
     def create_folder
       dirname = File.dirname(PATH_TO_FILE)
-      FileUtils.mkdir_p(dirname) && File.new(FILE_NAME, 'w') unless File.directory?(dirname)
+      return FileUtils.mkdir_p(dirname) && File.new(FILE_NAME, 'w') if File.directory?(dirname)
     end
 
     def save_to_file(data)
