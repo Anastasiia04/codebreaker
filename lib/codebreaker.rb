@@ -1,13 +1,4 @@
-require 'terminal-table'
-require 'psych'
-require 'validate.rb'
-require 'errors/attempt_error.rb'
-require 'errors/choose_error.rb'
-require 'errors/length_error.rb'
-require 'storage.rb'
-require 'user.rb'
-require 'difficulty.rb'
-require 'codebreaker/version'
+require 'autoload.rb'
 
 module Codebreaker
   class Error < StandardError; end
@@ -17,16 +8,15 @@ module Codebreaker
     include Errors
     include Storage
     attr_accessor :user, :attempts, :hints, :win,
-                  :secret_hash, :symbol_guess_position, :symbol_guess_number, :count_minus, :count_plus,
-                  :length_code, :range_sectret_number
+                  :secret_hash, :count_minus, :count_plus
+    SYMBOL_GUESS_POSITION = '+'.freeze
+    SYMBOL_GUESS_NUMBER = '-'.freeze
+    LENGTH_CODE = 4
+    RANGE_SECRET_NUMBER = 6
 
     def initialize
       @count_minus = 0
       @count_plus = 0
-      @symbol_guess_position = '+'
-      @symbol_guess_number = '-'
-      @length_code = 4
-      @range_sectret_number = 6
     end
 
     def registration_user(name)
@@ -65,7 +55,7 @@ module Codebreaker
     end
 
     def start
-      @secret_hash = Hash[(0...@length_code).zip Array.new(@length_code) { rand(1...@range_sectret_number) }]
+      @secret_hash = Hash[(0...LENGTH_CODE).zip Array.new(LENGTH_CODE) { rand(1...RANGE_SECRET_NUMBER) }]
     end
 
     def show_hint
@@ -77,13 +67,13 @@ module Codebreaker
     end
 
     def check_attempt(user_string)
-      @user_hash = Hash[(0...@length_code).zip user_string.split('').map(&:to_i)]
+      @user_hash = Hash[(0..LENGTH_CODE).zip user_string.split('').map(&:to_i)]
       array_of_guess_position = []
       @attempts -= 1
       secret_hash = @secret_hash
       compare_hashes(secret_hash)
-      @count_plus.times { array_of_guess_position << @symbol_guess_position }
-      @count_minus.times { array_of_guess_position << @symbol_guess_number }
+      @count_plus.times { array_of_guess_position << SYMBOL_GUESS_POSITION }
+      @count_minus.times { array_of_guess_position << SYMBOL_GUESS_NUMBER }
       array_of_guess_position
     end
 

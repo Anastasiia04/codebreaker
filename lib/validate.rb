@@ -6,7 +6,8 @@ module Validate
   end
 
   def validate_attempt_size(user_string)
-    if user_string.size > @length_code || user_string.size < @length_code || user_string.to_i.negative?
+    length_code = Codebreaker::Game::LENGTH_CODE
+    if user_string.size > length_code || user_string.size < length_code || user_string.to_i.negative?
       raise Codebreaker::Errors::AttemptError
     end
 
@@ -14,8 +15,10 @@ module Validate
   end
 
   def validate_attempt_range(user_string)
-    arr_of_num = user_string.to_i.digits.map { |num| num if (1..@range_sectret_number).to_a.include? num }.compact
-    raise Codebreaker::Errors::AttemptError unless arr_of_num.size >= @length_code
+    arr_of_num = user_string.to_i.digits.map do |num|
+      num if (1..Codebreaker::Game::RANGE_SECRET_NUMBER).to_a.include? num
+    end .compact
+    raise Codebreaker::Errors::AttemptError unless arr_of_num.size >= Codebreaker::Game::LENGTH_CODE
 
     user_string
   end
