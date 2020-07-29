@@ -7,7 +7,7 @@ module Codebreaker
     PATH_TO_FILE = File.join(FOLDER_NAME, FILE_NAME)
 
     def create_folder
-      Dir.mkdir(FOLDER_NAME) || File.new(PATH_TO_FILE, 'w') until file_exist
+      Dir.mkdir(FOLDER_NAME) && File.new(PATH_TO_FILE, 'w') until file_exist
     end
 
     def save_to_file(data)
