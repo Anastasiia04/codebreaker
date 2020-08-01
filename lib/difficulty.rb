@@ -1,34 +1,29 @@
-require 'validate.rb'
-require 'errors/choose_error.rb'
-
 module Codebreaker
   class Difficulty
     include Errors
     include Validate
 
-    attr_accessor :title, :attempts, :hints
+    attr_reader :title, :attempts, :hints, :difficulty
+
+    DIFFICULTY = {
+      easy: { attempts: 15, hints: 2, title: 'easy' },
+      medium: { attempts: 10, hints: 1, title: 'medium' },
+      hell: { attempts: 5, hints: 1, title: 'hell' }
+    }.freeze
 
     def initialize(difficulty)
       validate_difficulty(difficulty)
-      choose_difficulty(difficulty)
-    end
-
-    DIFFICULTY = {
-      'easy' => [15, 2, '1 easy'],
-      'medium' => [10, 1, '2 medium'],
-      'hell' => [5, 1, '3 hell']
-    }.freeze
-
-    def choose_difficulty(choose_difficult_string)
-      @difficulty = DIFFICULTY[choose_difficult_string]
-      @attempts = @difficulty[0]
-      @hints = @difficulty[1]
-      @title = @difficulty[2]
+      difficulty = DIFFICULTY[difficulty.to_sym]
+      @attempts = difficulty[:attempts]
+      @hints = difficulty[:hints]
+      @title = difficulty[:title]
     end
 
     def validate_difficulty(difficulty)
-      valid_difficulty_commands = DIFFICULTY.map { |key, _v| key }
-      raise ChooseError unless valid_difficulty_commands.include?(difficulty)
+      valid_difficulty_title = DIFFICULTY.values.map { |value| value[:title] }
+      raise DifficultyError until valid_difficulty_title.include?(difficulty)
+
+      difficulty
     end
   end
 end

@@ -18,7 +18,7 @@ module Codebreaker
     private
 
     def validate
-      raise LengthError unless size_between?(@name, NAME_SIZE[:minimum], NAME_SIZE[:maximum])
+      raise NameError unless size_between?(@name, NAME_SIZE[:minimum], NAME_SIZE[:maximum])
     end
   end
 end

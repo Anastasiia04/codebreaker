@@ -1,8 +1,8 @@
 module Codebreaker
   module Errors
-    class LengthError < StandardError
+    class NameError < StandardError
       def initialize
-        super(puts 'Invalid name.')
+        super(I18n.t(:invalid_name))
       end
     end
   end

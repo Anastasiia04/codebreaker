@@ -1,4 +1,16 @@
-require_relative 'autoload.rb'
+require 'terminal-table'
+require 'psych'
+require 'i18n'
+require 'fileutils'
+require 'validate.rb'
+require 'locale_config.rb'
+require 'errors/attempt_error.rb'
+require 'errors/difficulty_error.rb'
+require 'errors/length_error.rb'
+require 'storage.rb'
+require 'user.rb'
+require 'difficulty.rb'
+require 'codebreaker/version'
 
 module Codebreaker
   class Error < StandardError; end
@@ -6,75 +18,49 @@ module Codebreaker
   class Game
     include Validate
     include Errors
-    include Storage
-    attr_accessor :user, :attempts, :hints, :win,
-                  :secret_hash, :count_minus, :count_plus
-    SYMBOL_GUESS_POSITION = '+'.freeze
-    SYMBOL_GUESS_NUMBER = '-'.freeze
+    attr_reader :user, :count_minus, :count_plus, :difficulty
+    attr_accessor :attempts, :hints, :secret_hash
     LENGTH_CODE = 4
     RANGE_SECRET_NUMBER = 6
 
     def initialize
       @count_minus = 0
       @count_plus = 0
+      @secret_hash = Hash[(0...LENGTH_CODE).zip Array.new(LENGTH_CODE) { rand(1...RANGE_SECRET_NUMBER) }]
+      @number_for_hint = @secret_hash.values.shuffle
     end
 
-    def registration_user(name)
+    def create_user(name)
       @user = User.new(name)
     end
 
-    def registration_difficulty(difficulty)
+    def choose_difficulty(difficulty)
       @difficulty = Difficulty.new(difficulty)
       @attempts = @difficulty.attempts
       @hints = @difficulty.hints
     end
 
-    def add_rating
-      rating = 1
-      new_sort_arr = []
-      sort_data.each do |data|
-        new_sort_arr << { rating: rating }.merge!(data)
-        rating += 1
-      end
-      new_sort_arr
-    end
-
-    def stats(data_whith_rating = add_rating)
-      rows = []
-      data_whith_rating.each { |d| rows << d.map { |_k, v| v } }
-      to_table(rows)
+    def stats
+      sort_data
     end
 
     def sort_data
-      load_from_file.sort_by { |h| [h[:difficult], h[:attempts], h[:hints]] }.reverse
+      difficulty_order = Difficulty::DIFFICULTY.keys
+      Storage.new.load_from_file.sort_by { |h| [difficulty_order.index(h[:difficulty]), h[:attempts], h[:hints]] }
     end
 
-    def to_table(rows)
-      Terminal::Table.new headings:
-          ['Rating', 'Name', 'Difficulty', 'Attempts Total', 'Attempts Used', 'Hints Total', 'Hints Used'], rows: rows
-    end
-
-    def start
-      @secret_hash = Hash[(0...LENGTH_CODE).zip Array.new(LENGTH_CODE) { rand(1...RANGE_SECRET_NUMBER) }]
-    end
-
-    def show_hint
+    def hint!
       return false if @hints.zero?
 
       @hints -= 1
-      secret_arr_value = @secret_hash.values
-      secret_arr_value.delete_at(rand(secret_arr_value.length))
+      @number_for_hint.pop
     end
 
     def check_attempt(user_string)
       @user_hash = Hash[(0..LENGTH_CODE).zip user_string.split('').map(&:to_i)]
-      array_of_guess_position = []
       @attempts -= 1
       secret_hash = @secret_hash
       compare_hashes(secret_hash)
-      @count_plus.times { array_of_guess_position << SYMBOL_GUESS_POSITION }
-      @count_minus.times { array_of_guess_position << SYMBOL_GUESS_NUMBER }
-      array_of_guess_position
     end
 
     def compare_hashes(secret_hash)
@@ -90,14 +76,7 @@ module Codebreaker
       hash = {  name: @user.name, difficult: @difficulty.title,
                 total_attempts: @difficulty.attempts, attempts: @attempts,
                 total_hints: @difficulty.hints, hints: @hints }
-      save_to_file(hash)
-    end
-
-    def play_again
-      @attempts = @difficulty.attempts
-      @hints = @difficulty.hints
-      @count_minus = 0
-      @count_plus = 0
+      Storage.new.save_to_file(hash)
     end
   end
 end

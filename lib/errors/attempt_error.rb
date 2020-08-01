@@ -2,7 +2,7 @@ module Codebreaker
   module Errors
     class AttemptError < StandardError
       def initialize
-        super(puts 'You enter invalid attempt.')
+        super(I18n.t(:invalid_attempt))
       end
     end
   end
