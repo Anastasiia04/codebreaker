@@ -1,4 +1,5 @@
 en:
-    invalid_name: Invalid name.
-    invalid_attempt: You enter invalid attempt.
-    invalid_difficulty: Invalid difficulty.
+    invalid_length: "%{string} have not valid length."
+    code_length: "Input code have invalid length."
+    code_range: "Input code invalid range."
+    not_include: "%{values} does not include %{value}\n"

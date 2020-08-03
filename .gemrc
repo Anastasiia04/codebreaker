@@ -1,8 +1,0 @@
----
-:backtrace: false
-:bulk_threshold: 1000
-:sources:
-- https://rubygems.org/
-- https://Anastasiia04:e6a0fd5250c0f4188ee4bcabd927180a9c1c25e0@rubygems.pkg.github.com/Anastasiia04/
-:update_sources: true
-:verbose: true

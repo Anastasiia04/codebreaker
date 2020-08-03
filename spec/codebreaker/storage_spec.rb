@@ -1,5 +1,3 @@
-require 'spec_helper.rb'
-
 RSpec.describe Codebreaker::Storage do
   describe 'create storage' do
     let(:storage) { described_class.new }
@@ -14,7 +12,7 @@ RSpec.describe Codebreaker::Storage do
     end
 
     it 'create statistics.yml file' do
-      expect(storage.file_exist) == true
+      expect(storage.file_exist?).to eq(true)
     end
 
     it 'must load empty array' do

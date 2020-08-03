@@ -2,7 +2,10 @@ require: rubocop-rspec
 
 Style/FrozenStringLiteralComment:
   Enabled: false
-
+  
+RSpec/LeakyConstantDeclaration:
+  Enabled: false
+  
 Style/Documentation:
   Enabled: false
   

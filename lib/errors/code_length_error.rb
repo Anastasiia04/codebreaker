@@ -1,8 +1,8 @@
 module Codebreaker
   module Errors
-    class AttemptError < StandardError
+    class CodeLengthError < StandardError
       def initialize
-        super(I18n.t(:invalid_attempt))
+        super(I18n.t(:code_length))
       end
     end
   end

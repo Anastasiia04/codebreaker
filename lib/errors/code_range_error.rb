@@ -1,8 +1,8 @@
 module Codebreaker
   module Errors
-    class LengthError < StandardError
+    class CodeRangeError < StandardError
       def initialize
-        super(I18n.t(:invalid_length))
+        super(I18n.t(:code_range))
       end
     end
   end
