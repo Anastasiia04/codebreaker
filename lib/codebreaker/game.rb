@@ -36,8 +36,6 @@ module Codebreaker
     end
 
     def check_attempt(user_string)
-      Validate.code_length?(user_string)
-      Validate.code_range?(user_string)
       @user_hash = Hash[(0..LENGTH_CODE).zip user_string.split('').map(&:to_i)]
       @attempts -= 1
       compare_hashes(@secret_hash)
