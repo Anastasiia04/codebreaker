@@ -23,8 +23,12 @@ module Codebreaker
     RANGE_SECRET_NUMBER = 6
 
     def initialize
-      @secret_hash = Hash[(0...LENGTH_CODE).zip Array.new(LENGTH_CODE) { rand(1...RANGE_SECRET_NUMBER) }]
+      @secret_hash = generate_secret
       @number_for_hint = @secret_hash.values.shuffle
+    end
+
+    def generate_secret
+      Hash[(0...LENGTH_CODE).zip Array.new(LENGTH_CODE) { rand(1...RANGE_SECRET_NUMBER) }]
     end
 
     def change_secret_hash(hash)
@@ -49,8 +53,8 @@ module Codebreaker
     end
 
     def check_attempt(user_string)
-      Validate.new.code_length?(user_string)
-      Validate.new.code_range?(user_string)
+      Validate.code_length?(user_string)
+      Validate.code_range?(user_string)
       @user_hash = Hash[(0..LENGTH_CODE).zip user_string.split('').map(&:to_i)]
       @attempts -= 1
       compare_hashes(@secret_hash)

@@ -9,7 +9,7 @@ module Codebreaker
     }.freeze
 
     def initialize(difficulty)
-      Validate.new.include?(LIST.keys, difficulty.to_sym)
+      Validate.include?(LIST.keys, difficulty.to_sym)
       difficulty = LIST[difficulty.to_sym]
       @attempts = difficulty[:attempts]
       @hints = difficulty[:hints]

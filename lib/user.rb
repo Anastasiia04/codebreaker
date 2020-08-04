@@ -6,7 +6,7 @@ module Codebreaker
 
     def initialize(name)
       @name = name
-      Validate.new.length?(@name, NAME_SIZE[:minimum], NAME_SIZE[:maximum])
+      Validate.length?(@name, NAME_SIZE[:minimum], NAME_SIZE[:maximum])
     end
   end
 end
