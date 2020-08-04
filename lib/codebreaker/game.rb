@@ -1,22 +1,5 @@
-require 'psych'
-require 'i18n'
-require 'fileutils'
-require 'validate.rb'
-require 'locale_config.rb'
-require 'errors/code_length_error.rb'
-require 'errors/code_range_error.rb'
-require 'errors/include_error.rb'
-require 'errors/length_error.rb'
-require 'storage.rb'
-require 'user.rb'
-require 'difficulty.rb'
-require 'codebreaker/version'
-
 module Codebreaker
-  class Error < StandardError; end
-
   class Game
-    include Errors
     attr_reader :user, :count_minus, :count_plus, :difficulty, :attempts, :hints, :secret_hash
 
     LENGTH_CODE = 4
