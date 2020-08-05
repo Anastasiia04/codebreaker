@@ -52,8 +52,8 @@ module Codebreaker
 
     def to_h
       { name: @user.name, difficult: @difficulty.title,
-        total_attempts: @difficulty.attempts, attempts: @attempts,
-        total_hints: @difficulty.hints, hints: @hints }
+        total_attempts: @difficulty.attempts, attempts: @difficulty.attempts - @attempts,
+        total_hints: @difficulty.hints, hints: @difficulty.hints - @hints }
     end
 
     def save
