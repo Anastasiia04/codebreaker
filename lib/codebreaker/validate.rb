@@ -5,7 +5,7 @@ module Codebreaker
     end
 
     def self.include?(check_values, verifiable_value)
-      error = Codebreaker::Errors::IncludeError.new(check_values, verifiable_value)
+      error = Codebreaker::Errors::IncludeError
       raise error unless check_values.include?(verifiable_value)
     end
 
