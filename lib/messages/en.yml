@@ -1,5 +1,5 @@
 en:
-    invalid_length: "%{string} have not valid length."
+    invalid_length: "Invalid length."
     code_length: "Input code have invalid length."
     code_range: "Input code invalid range."
     not_include: "%{values} does not include %{value}\n"
